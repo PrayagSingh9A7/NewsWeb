@@ -247,9 +247,9 @@ body {
 }
 
 .filters-bar {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   align-items: end;
-  justify-content: space-between;
   gap: 1rem;
   margin-bottom: 1.5rem;
   padding: 1rem;
@@ -260,8 +260,9 @@ body {
 }
 
 .filter-control {
-  flex: 1 1 14rem;
+  min-width: 0;
 }
+
 
 .filter-control .form-label {
   color: var(--app-muted);
@@ -348,12 +349,14 @@ body[data-theme="dark"] .skeleton {
 }
 
 @media (max-width: 767.98px) {
-  .filters-bar {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
   .card-actions .btn {
     flex: 1 1 auto;
   }
 }
+
+@media (max-width: 575.98px) {
+  .filters-bar {
+    grid-template-columns: 1fr;
+  }
+}
+
