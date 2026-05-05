@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 
-const API_URL = "/api/news";
-
+const API_URL = "https://gnews.io/api/v4";
 const PAGE_SIZE = 9;
 
 const topicMap = {
@@ -14,15 +13,24 @@ const topicMap = {
 };
 
 function buildNewsUrl({ category, page, searchTerm }) {
+  const apiKey = import.meta.env.VITE_GNEWS_API_KEY || "";
+
   const params = new URLSearchParams({
-    category,
+    lang: "en",
+    country: "in",
+    max: PAGE_SIZE.toString(),
     page: page.toString(),
-    search: searchTerm.trim(),
+    apikey: apiKey,
   });
 
-  return `${API_URL}?${params.toString()}`;
-}
+  if (searchTerm.trim()) {
+    params.append("q", searchTerm.trim());
+    return `${API_URL}/search?${params.toString()}`;
+  }
 
+  params.append("topic", topicMap[category] || "breaking-news");
+  return `${API_URL}/top-headlines?${params.toString()}`;
+}
 
 export function useNews({ category, page, searchTerm }) {
   const [articles, setArticles] = useState([]);
