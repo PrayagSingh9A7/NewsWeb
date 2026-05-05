@@ -6,7 +6,7 @@ function Navbar({ isDarkMode, onToggleDarkMode }) {
     <nav className="navbar navbar-expand-lg sticky-top shadow-sm app-navbar">
       <div className="container">
         <NavLink className="navbar-brand fw-bold" to="/">
-          India Newsroom
+          NewsWeb
         </NavLink>
 
         <button
