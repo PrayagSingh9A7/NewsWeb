@@ -1,35 +1,22 @@
 import { useEffect, useState } from "react";
 
-const API_URL = "https://gnews.io/api/v4";
 const PAGE_SIZE = 9;
 
-const topicMap = {
-  general: "breaking-news",
-  business: "business",
-  sports: "sports",
-  technology: "technology",
-  health: "health",
-  science: "science",
-};
-
 function buildNewsUrl({ category, page, searchTerm }) {
-  const apiKey = import.meta.env.VITE_GNEWS_API_KEY || "";
-
   const params = new URLSearchParams({
-    lang: "en",
-    country: "in",
-    max: PAGE_SIZE.toString(),
+    category,
     page: page.toString(),
-    apikey: apiKey,
+    search: searchTerm.trim(),
   });
 
-  if (searchTerm.trim()) {
-    params.append("q", searchTerm.trim());
-    return `${API_URL}/search?${params.toString()}`;
+  // 🔥 Check environment
+  if (import.meta.env.DEV) {
+  
+    return `https://gnews.io/api/v4/top-headlines?lang=en&country=in&max=9&apikey=${import.meta.env.VITE_GNEWS_API_KEY}`;
+  } else {
+  
+    return `/api/news?${params.toString()}`;
   }
-
-  params.append("topic", topicMap[category] || "breaking-news");
-  return `${API_URL}/top-headlines?${params.toString()}`;
 }
 
 export function useNews({ category, page, searchTerm }) {
@@ -39,16 +26,6 @@ export function useNews({ category, page, searchTerm }) {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    const apiKey = import.meta.env.VITE_GNEWS_API_KEY;
-
-    if (!apiKey || apiKey === "your_gnews_api_key_here") {
-      setArticles([]);
-      setTotalResults(0);
-      setLoading(false);
-      setError("Add your GNews API key to the .env file as VITE_GNEWS_API_KEY.");
-      return;
-    }
-
     const controller = new AbortController();
 
     async function fetchNews() {
