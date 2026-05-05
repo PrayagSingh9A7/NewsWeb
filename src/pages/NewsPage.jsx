@@ -67,9 +67,9 @@ function NewsPage({ category, isSaved, onToggleBookmark }) {
           </p>
         </div>
 
-        <div className="results-pill">
+        {/* <div className="results-pill">
           {loading ? "Loading" : `${totalResults} results`}
-        </div>
+        </div> */}
       </div>
 
       <SearchBar initialValue={searchTerm} onSearch={handleSearch} />
